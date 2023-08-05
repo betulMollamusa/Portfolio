@@ -1,0 +1,154 @@
+<!-- Bu, Türkçe dilinde yazılmış bir HTML belgesidir (lang="tr") -->
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <!-- Karakter kodlamasını ve responsive tasarım için viewport'u belirle -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Web sayfasının başlığı -->
+    <title>Portföy</title>
+    <!-- Sayfa için dahili CSS stili -->
+    <style>
+        /* Sayfa için stil özellikleri */
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Başlık için stil özellikleri */
+        header {
+            background-color: #19173d;
+            color: #c6cbd7;
+            text-align: center;
+            padding: 1.5rem;
+        }
+
+        /* "Kişiselleştirme" düğmesi için stil özellikleri */
+        customizing-btn {
+            position: absolute;
+            top: 5px; /* Düğmenin başlık içindeki üst kenar pozisyonu */
+            right: 0px; /* Düğmenin başlık içindeki sağ kenar pozisyonu */
+            background-color: #91a1be;
+            color: #312f54;
+            border: none;
+            padding: 3px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* Navigasyon için stil özellikleri */
+        nav {
+            background-color: #bccbe1;
+            text-align: center;
+            padding: 0.5rem;
+        }
+
+        /* Navigasyon için liste stil özellikleri */
+        nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navigasyon için liste öğesi stil özellikleri */
+        nav ul li {
+            display: inline-block;
+            margin-right: 20px;
+        }
+
+        nav ul li:last-child {
+            margin-right: 0;
+        }
+
+        /* Navigasyon bağlantıları için stil özellikleri */
+        nav ul li a {
+            color: #141a3c;
+            text-decoration: none;
+        }
+
+        nav ul li a:hover {
+            color: #162c67;
+        }
+
+        /* Bölümler için stil özellikleri */
+        section {
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Başlık bölümü, başlık ve "Kişiselleştirme" düğmesini içerir -->
+    <header>
+        <h1 id="adSoyadBilgisi">Benim Portföyüm</h1>
+        <!-- "Kişiselleştirme" düğmesine tıklandığında 'customize.html' sayfasına yönlendiren onclick olayı bulunur -->
+        <button id="customizing-btn" onclick="window.location.href = 'customize.html';">Kişiselleştir</button>
+    </header>
+
+    <!-- Navigasyon bölümü şu anda boştur -->
+
+    <!-- "Hakkımda" Bölümü -->
+    <section id="about">
+        <h2>Hakkımda</h2>
+        <p id="hakkimdaBilgisi">Merhaba! Benim adım [Adınız Soyadınız]. Kendiniz veya eğitiminiz hakkında birkaç cümle yazın...</p>
+    </section>
+
+    <!-- "Projeler" Bölümü -->
+    <section id="projects">
+        <h2>Projeler</h2>
+        <p id="projelerListesi">Yazdığınız veya katıldığınız proje ismi ve dosyasını ekleyebilirsiniz...</p>
+        <!-- Projeleri göstermek için sırasız liste -->
+        <ul id="projelerListesi"></ul>
+    </section>
+
+    <!-- "İletişim" Bölümü -->
+    <section id="contact">
+        <h2>İletişim</h2>
+        <p>E-posta: <span id="emailBilgisi">[e-posta adresiniz]</span></p>
+        <p>Telefon: <span id="telefonBilgisi">[telefon numaranız]</span></p>
+    </section>
+
+    <!-- JavaScript kodu, oturum depolamadan bilgi yüklemek ve sayfayı güncellemek için -->
+    <script>
+        function loadLocalStorage() {
+            // Verileri oturum depolamadan yükle veya veri yoksa varsayılan değerleri kullan
+            const adSoyad = sessionStorage.getItem('adSoyad') || "Benim Portföyüm";
+            const hakkimda = sessionStorage.getItem('hakkimda') || "[Hakkımda bilgisi yok]";
+            const iletisimEmail = sessionStorage.getItem('iletisimEmail') || "[E-posta bilgisi yok]";
+            const iletisimTelefon = sessionStorage.getItem('iletisimTelefon') || "[Telefon bilgisi yok]";
+            const projeler = JSON.parse(sessionStorage.getItem('projeler')) || [];
+
+            // Önceki projelerin listesini temizle
+            document.getElementById('projelerListesi').innerHTML = '';
+
+            // Alınan verilerle öğeleri güncelle
+            document.getElementById('adSoyadBilgisi').textContent = adSoyad;
+            document.getElementById('hakkimdaBilgisi').textContent = hakkimda;
+            document.getElementById('emailBilgisi').textContent = iletisimEmail;
+            document.getElementById('telefonBilgisi').textContent = iletisimTelefon;
+
+            const projelerListesi = document.getElementById('projelerListesi');
+
+            // Projeler üzerinde döngü yaparak sırasız listeye ekleyin
+            projeler.forEach(proje => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = proje.projeLink;
+                a.textContent = proje.projeIsim;
+                li.appendChild(a);
+                projelerListesi.appendChild(li);
+            });
+        }
+
+        // Sayfa yüklendiğinde verileri oturum depolamadan yüklemek için işlevi çağırın
+        loadLocalStorage();
+    </script>
+</body>
+</html>
+
+<!-- İkinci HTML belgesi, portföy bilgilerini kişiselleştirmek için bir sayfa gibi görünmektedir -->
+<!-- Kişisel ve proje bilgilerini toplamak için form öğeleri içerir -->
+<!-- Projeleri eklemek ve girilen bilgileri oturum depolama ile kaydetmek için JavaScript işlevleri vardır -->
+<!-- Girilen bilgiler daha sonra "portfolio.html" sayfasında loadLocalStorage() işlevi ile alınabilir -->

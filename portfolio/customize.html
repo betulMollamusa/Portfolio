@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <!-- Meta etiketleri ile sayfanın karakter kodlaması ve responsive tasarımı belirle -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Sayfanın başlığı -->
+    <title>Kişisel Portföy Bilgilerim</title>
+    <!-- Sayfa için CSS stil özellikleri -->
+    <style>
+        /* Sayfa genelindeki stil özellikleri */
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+
+        /* Başlık bölümü için stil özellikleri */
+        header {
+            background-color: #19173d;
+            color: #c6cbd7;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        /* "Kişiselleştirme" düğmesi bölümü için stil özellikleri */
+        .customize-button {
+            max-width:1000px;
+            max-height: 2000px;
+            margin: 0 auto;
+            background-color: #c8cddc;
+            padding: 40px;
+            box-shadow: 0 2px 4px rgba(44, 38, 38, 0.1);
+            border-radius: 0px;
+        }
+
+        .customize-button h2 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #312f54;
+        }
+
+        .customize-button label {
+            display: block;
+            margin-top: 16px;
+            color: #252441;
+        }
+
+        .customize-button .project-row {
+            display:flex;
+        }
+
+        .customize-button .project-row label {
+            flex: 1;
+            margin-right: 12px;
+        }
+
+        .customize-button .project-row input[type="text"],
+        .customize-button .project-row input[type="url"] {
+            flex: 2.5;
+        }
+
+        .customize-button button[type="submit"] {
+            display:flex;
+            width: 50%;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #312f54;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .customize-button button[type="button"]{
+            display: block;
+            width: 20%;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #4b4880;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .customize-button button[type="submit"]:hover {
+            background-color: rgb(21, 33, 68);
+        }
+
+        .customize-button input{
+            width: 50%;
+            max-height:max-content;
+            flex: 2.5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Başlık bölümü -->
+    <header>
+        <h1>Kişisel Portföy Bilgilerim</h1>
+    </header>
+    <!-- Ana içerik bölümü -->
+    <main>
+        <!-- "Kişiselleştirme" düğmesine tıklanıldığında gösterilen içerik -->
+        <div class="customize-button">
+            <!-- Başlık -->
+            <h2>Gerekli bilgilerinizi giriniz</h2>
+            <!-- Bilgi girişi için form -->
+            <form onsubmit="return false">
+
+                <!-- Ad ve Soyad girişi için etiket ve giriş alanı -->
+                <label for ="adSoyad">Adınız ve Soyadınız:</label>
+                <input type="text" id="adSoyad" required>
+
+                <!-- Hakkımda girişi için etiket ve giriş alanı -->
+                <label for="hakkimda">Hakkımda Genel/Eğitim Bilgiler Özeti:</label>
+                <input type="text" id="hakkimda" required>
+
+                <!-- E-posta girişi için etiket ve giriş alanı -->
+                <label for="iletisimEmail">İletişim E-posta:</label>
+                <input type="email" id="iletisimEmail" required>
+
+                <!-- Telefon girişi için etiket ve giriş alanı -->
+                <label for="iletisimTelefon">İletişim Telefon:</label>
+                <input type="tel" id="iletisimTelefon" required>
+
+                <!-- Projeler başlığı -->
+                <label for="projeler">PROJELERİNİZ</label>
+
+                <!-- Proje bilgisi girişi için "project-row" sınıfı içindeki etiket ve giriş alanları -->
+                <div class="project-row">
+                    <label for="projeIsim">Proje ismi:</label>
+                    <input type="text" id="projeIsim" required>
+
+                    <label for="projeLink">Proje Linki:</label>
+                    <input type="url" id="projeLink" required>
+                </div>
+
+                <!-- Proje eklemek için "Ekle" düğmesi -->
+                <button type="button" onclick="ekleProje()">Ekle</button>
+
+                <!-- Bilgileri kaydetmek için "KAYDET" düğmesi -->
+                <button type="button" onclick="kaydetBilgiler()">KAYDET</button>
+
+            </form>
+        </div>
+    </main>
+
+    <!-- JavaScript kodu, proje eklemek ve bilgileri kaydetmek için işlevler içerir -->
+    <script>
+        // Proje eklemek için işlev
+        function ekleProje() {
+            temizleSessionStorage();
+            const projeIsim = document.getElementById('projeIsim').value;
+            const projeLink = document.getElementById('projeLink').value;
+
+            if (projeIsim.trim() !== '' && projeLink.trim() !== '') {
+                const projeler = JSON.parse(sessionStorage.getItem('projeler')) || [];
+                projeler.push({ projeIsim, projeLink });
+                sessionStorage.setItem('projeler', JSON.stringify(projeler));
+                alert("Proje başarıyla eklenmiştir.");
+                document.getElementById('projeIsim').value = '';
+                document.getElementById('projeLink').value = '';
+            } else {
+                alert("Lütfen proje ismi ve proje linki alanlarını doldurun.");
+            }
+        }
+
+        // Bilgileri kaydetmek için işlev
+        function kaydetBilgiler() {
+            const adSoyad = document.getElementById('adSoyad').value;
+            const hakkimda = document.getElementById('hakkimda').value;
+            const iletisimEmail = document.getElementById('iletisimEmail').value;
+            const iletisimTelefon = document.getElementById('iletisimTelefon').value;
+            sessionStorage.setItem('adSoyad', adSoyad);
+            sessionStorage.setItem('hakkimda', hakkimda);
+            sessionStorage.setItem('iletisimEmail', iletisimEmail);
+            sessionStorage.setItem('iletisimTelefon', iletisimTelefon);
+            alert("Bilgiler kaydedildi.");
+            window.location.href = 'portfolio.html'; // Kaydedildikten sonra "portfolio.html" sayfasına yönlendirme
+        }
+
+        // Projeleri temizlemek için işlev
+        function temizleSessionStorage() {
+            sessionStorage.removeItem('projeler');
+        }
+    </script>
+</body>
+</html>
